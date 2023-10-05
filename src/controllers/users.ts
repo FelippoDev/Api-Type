@@ -35,3 +35,28 @@ export const userDelete = async (req:express.Request, res:express.Response) => {
         return res.sendStatus(400)
     }
 }
+
+
+export const userUpdate = async (req: express.Request, res:express.Response) => {
+    try {
+        const { pk } = req.params
+        const { username } = req.body
+
+        if(!username){
+            return res.sendStatus(400)
+        }
+
+        const user = await getUserById(pk)
+        if(!user){
+            return res.sendStatus(400)
+        }
+
+        user.username = username
+        await user.save()
+
+        return res.status(200).json(user)
+    } catch (error) {
+        console.log(error)
+        return res.sendStatus(400)
+    }
+}
